@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/manage}">
+
+<head>
+    <title>강의 [[${lecture.name}]]의 출석 관리 항목</title>
+</head>
+
+<body>
+    <main layout:fragment="content">
+        <h1 class="text-2xl my-2 font-bold">출석 관리</h1>
+        <form method="get">
+            <input type="date" th:name="startdate" th:value="${startdate}" th:min="${lecture.startDate}" th:max="${lecture.endDate}"
+                class="border-blue-400 border-2" required>
+            <input type="submit" value="날짜 선택" class="rounded-md bg-slate-200 p-2 text-sm">
+        </form>
+        <table>
+            <thead>
+                <tr>
+                    <th>이름</th>
+                    <th>출석 시작</th>
+                    <th>출석 끝</th>
+                    <th>상태</th>
+                    <th>사유</th>
+                    <th>선택</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="attendance : ${attendances}" th:object="${attendance}">
+                    <td>[[*{member.name}]]</td>
+                    <td>[[*{startTime} ?: '-']]</td>
+                    <td>[[*{endTime} ?: '-']]</td>
+                    <td th:unless="*{startTime eq null or endTime eq null}">출석</td>
+                    <td th:if="*{(startTime eq null) ne (endTime eq null)}">조퇴</td>
+                    <td th:if="*{startTime eq null and endTime eq null}">결석</td>
+                    <td>[[*{reason}]]</td>
+                    <td>
+                        <button type="button" th:data-id="*{id}"
+                            class="edit rounded-md bg-slate-200 p-2 text-sm">수정</button>
+                        <dialog th:id="|dialog*{id}|">
+                            <form th:action="@{/manage/__${lecture_id}__/attendance}" method="post">
+                                <p>[[*{member.name}]]</p>
+                                <p>출석 시작: <input type="time" th:name="starttime" th:value="*{startTime}"
+                                        class="border-blue-400 border-2" required></p>
+                                <p>출석 끝: <input type="time" th:name="endtime" th:value="*{endTime}"
+                                        class="border-blue-400 border-2" required></p>
+                                <p>사유:<br><textarea name="reason"
+                                        class="border-blue-400 border-2" required>[[*{reason}]]</textarea></p>
+                                <p>
+                                    <input type="submit" value="수정 완료" class="rounded-md bg-slate-200 p-2 text-sm">
+                                    <input type="button" value="취소" th:data-id="*{id}"
+                                        class="cancel rounded-md bg-slate-200 p-2 text-sm">
+                                </p>
+                                <input type="hidden" th:name="id" th:value="*{id}">
+                            </form>
+                        </dialog>
+                        <script type="module" th:src="@{/js/erc.js}"></script>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(attendances)}">
+                    <td colspan="6">어떠한 내역도 없습니다.</td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+</body>
+
+</html>

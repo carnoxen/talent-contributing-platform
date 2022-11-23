@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+
+<body>
+    <nav layout:fragment="nav" th:replace="fragments/main/nav :: nav"></nav>
+    <main layout:fragment="content" class="px-32 mt-4">
+        <div layout:fragment="heading" th:replace="fragments/main/lecture/heading :: heading"></div>
+        <div layout:fragment="nav-sub" th:replace="fragments/main/lecture/nav-sub :: nav-sub"></div>
+        <div layout:fragment="inner-content"></div>
+        <script type="module" th:src="@{/js/erc.js}"></script>
+    </main>
+</body>
+
+</html>

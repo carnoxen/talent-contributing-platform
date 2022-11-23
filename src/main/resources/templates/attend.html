@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex">
+    <title>회원 [[${you.name}]]의 출석 페이지</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+
+<body class="grid w-screen h-screen place-content-center">
+    <main class="">
+        <th:block th:if="${attendance}" th:object="${attendance}">
+            <form method="get" class="mb-10">
+                <p class="flex items-center gap-2">
+                    <select name="attendance_id" class="p-2 border-blue-600 rounded-lg border-2">
+                        <option th:each="a : ${attendances}" th:value="${a.id}" th:selected="${a.id == attendance.id}">
+                            [[${a.lecture.name}]]</option>
+                    </select>
+                    <input type="submit" value="강의 선택" class="bg-gray-200 rounded-lg p-2">
+                    <a th:href="@{/}" class="block bg-green-400 text-white p-1.5 rounded-md">홈페이지</a>
+                </p>
+            </form>
+            <form th:action="@{/attend}" method="post" class="grid justify-items-center">
+                <p class="mb-10">
+                    <button type="submit" th:if="${before_time}" disabled
+                        class="w-48 h-48 rounded-full text-5xl bg-gray-400 text-gray-500">출석 전</button>
+                    <button type="submit" th:if="${on_time and attendance.startTime == null}"
+                        class="w-48 h-48 rounded-full bg-green-500 text-5xl">출석</button>
+                    <button type="submit" th:if="${after_time and attendance.startTime == null}" disabled
+                        class="w-48 h-48 rounded-full text-5xl bg-gray-400 text-gray-500">지각</button>
+                    <button type="submit" th:if="*{startTime != null and endTime == null}"
+                        class="w-48 h-48 rounded-full text-5xl bg-green-500">퇴실</button>
+                    <button type="submit" th:if="*{endTime != null}" disabled
+                        class="w-48 h-48 rounded-full text-5xl bg-gray-400 text-gray-500">종료</button>
+                </p>
+                <p><button type="button" th:data-id="*{id}" class="edit bg-slate-400 p-3 rounded-xl">결석/조퇴 시 사유
+                        작성</button></p>
+                <input type="hidden" name="command" value="attend">
+                <input type="hidden" th:field="*{id}">
+            </form>
+            <dialog th:id="|dialog*{id}|">
+                <form th:action="@{/attend/reason}" method="post">
+                    <p><textarea th:field="*{reason}" required></textarea></p>
+                    <p>
+                        <input type="submit" value="작성 완료">
+                        <input type="button" value="취소" class="cancel" th:data-id="*{id}">
+                    </p>
+                    <input type="hidden" th:field="*{id}">
+                </form>
+            </dialog>
+        </th:block>
+        <th:block th:unless="${attendance}">
+            <p>no attendances on today</p>
+        </th:block>
+    </main>
+    <script type="module" th:src="@{/js/erc.js}"></script>
+</body>
+
+</html>

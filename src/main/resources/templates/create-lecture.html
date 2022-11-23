@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex">
+    <title>강의 개설 페이지입니다.</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+
+<body>
+    <main class="p-10">
+        <h1 class="text-2xl my-2 font-bold">강의를 작성하세요</h1>
+        <form th:action="@{/create-lecture}" method="post" th:object="${form}" class="grid grid-cols-2">
+            <div>
+                <p><label for="name">제목:</label> <input type="text" th:field="*{name}" class="border-blue-400 border-2"
+                        required></p>
+                <p><label for="startdate">날짜:</label> <input type="date" th:field="*{startdate}" th:min="${next_day}"
+                        class="border-blue-400 border-2" required> ~ <input type="date" th:field="*{enddate}"
+                        th:min="${next_day}" class="border-blue-400 border-2" required></p>
+                <p><label for="address">주소:</label> <input type="text" th:field="*{address}" autocomplete="off"
+                        class="border-blue-400 border-2" required readonly placeholder="클릭하세요"></p>
+                <p><label for="address_internal">상세 주소:</label> <input type="text" th:field="*{address_internal}"
+                        autocomplete="off" class="border-blue-400 border-2" required></p>
+                <p><label for="categories">카테고리:</label> <span><input type="text" th:field="*{categories}"
+                            class="border-blue-400 border-2" placeholder="쉼표로 문자열 분할" required></span></p>
+                <p><label for="studentlimit">학생 제한:</label> <input type="number" th:field="*{studentlimit}"
+                        class="border-blue-400 border-2" required> 명
+                </p>
+                <p><label for="teacherlimit">강사 제한:</label> <input type="number" th:field="*{teacherlimit}"
+                        class="border-blue-400 border-2" required> 명
+                </p>
+            </div>
+            <div>
+                시간표:
+                <ul>
+                    <li th:each="weekdayForm, stat : *{weekdayForms}">
+                        <label>
+                            <th:block th:switch="*{weekdayForms[__${stat.index}__].weekday}">
+                                <span th:case="1">일:</span>
+                                <span th:case="2">월:</span>
+                                <span th:case="3">화:</span>
+                                <span th:case="4">수:</span>
+                                <span th:case="5">목:</span>
+                                <span th:case="6">금:</span>
+                                <span th:case="7">토:</span>
+                            </th:block>
+                            <input type="checkbox" th:field="*{weekdayForms[__${stat.index}__].checked}">
+                            <input type="hidden" th:field="*{weekdayForms[__${stat.index}__].weekday}"
+                                class="border-blue-400 border-2">
+                            <input type="time" th:field="*{weekdayForms[__${stat.index}__].starttime}"
+                                class="border-blue-400 border-2">
+                            ~
+                            <input type="time" th:field="*{weekdayForms[__${stat.index}__].endtime}"
+                                class="border-blue-400 border-2">
+                        </label>
+                    </li>
+                </ul>
+                <label for="attendLimitStart">출석 시간 제한:</label>
+                <span><input type="number" th:field="*{attendLimitStart}" min="0" max="60" required value="0">분 전 -
+                    <input type="number" th:field="*{attendLimitEnd}" min="0" max="60" required value="0">분 후</span>
+            </div>
+            <p class="col-span-2"><textarea th:field="*{description}"></textarea></p>
+            <p class="col-span-2"><input type="submit" value="작성 완료" class="rounded-md bg-slate-200 p-2 text-sm"></p>
+            <input type="hidden" th:field="*{latitude}">
+            <input type="hidden" th:field="*{longitude}">
+        </form>
+        <dialog id="address-dialog">
+            <form method="dialog">
+                <input type="text" id="address-map" list="address-list" autocomplete="off">
+                <datalist id="address-list"></datalist>
+                <input type="submit" value="cancel">
+            </form>
+        </dialog>
+    </main>
+    <script src="https://cdn.ckeditor.com/ckeditor5/35.1.0/classic/ckeditor.js"></script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector("#description"))
+            .catch(console.error);
+    </script>
+    <!--/* google place autocomplete */-->
+    <!--/* 
+        <script th:src="@{/js/g-auto.js}"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBJts9B8jo6qgSM0X1NoCbwNZeRZzDbMzo&callback=initAutocomplete&libraries=places" defer></script> 
+    */-->
+    <script th:src="@{/js/n-map.js}"></script>
+</body>
+
+</html>

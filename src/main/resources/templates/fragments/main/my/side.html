@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+
+<body>
+    <aside th:fragment="side">
+        <ul>
+            <li><a th:href="@{/my/info}" class="block bg-cyan-300 p-2 m-2 rounded">회원정보 수정</a></li>
+            <li><a th:href="@{/my/password}" class="block bg-cyan-300 p-2 m-2 rounded">비밀번호 수정</a></li>
+            <th:block th:if="${you?.kind == 1 or you?.kind == 2}">
+                <li><hr></li>
+                <li><a th:href="@{/my/participation}" class="block bg-cyan-300 p-2 m-2 rounded">참여 내역</a></li>
+                <li><a th:href="@{/my/attendance}" class="block bg-cyan-300 p-2 m-2 rounded">출석 내역</a></li>
+                <li th:if="${you?.kind == 1}"><a th:href="@{/my/appraisal}" class="block bg-cyan-300 p-2 m-2 rounded">평가 내역</a></li>
+            </th:block>
+            <th:block th:if="${you?.kind == 0 or you?.kind == 2}">
+                <li><hr></li>
+                <li><a th:href="@{/manage}" class="block bg-cyan-300 p-2 m-2 rounded">강의 관리</a></li>
+            </th:block>
+        </ul>
+    </aside>
+</body>
+
+</html>

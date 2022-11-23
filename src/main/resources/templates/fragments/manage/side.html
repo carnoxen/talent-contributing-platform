@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+
+<body>
+    <aside th:fragment="side" class="grid content-start bg-blue-300">
+        <ul>
+            <li><a th:href="@{/manage/{lecture_id}(lecture_id=${lecture_id})}"
+                    class="p-2 block text-sm hover:bg-blue-500 hover:text-white">홈</a></li>
+            <th:block th:if="${you?.kind eq 0}">
+                <li><a th:href="@{/manage/{lecture_id}/edit(lecture_id=${lecture_id})}"
+                        class="p-2 block text-sm hover:bg-blue-500 hover:text-white">강의 소개 편집</a></li>
+                <li><a th:href="@{/manage/{lecture_id}/participation(lecture_id=${lecture_id})}"
+                        class="p-2 block text-sm hover:bg-blue-500 hover:text-white">참여 관리</a></li>
+                <li><a th:href="@{/manage/{lecture_id}/attendance(lecture_id=${lecture_id})}"
+                        class="p-2 block text-sm hover:bg-blue-500 hover:text-white">출석 관리</a></li>
+                <li><a th:href="@{/manage/{lecture_id}/notice(lecture_id=${lecture_id})}"
+                        class="p-2 block text-sm hover:bg-blue-500 hover:text-white">공지 관리</a></li>
+            </th:block>
+            <th:block th:if="${you?.kind eq 2}">
+                <li><a th:href="@{/manage/{lecture_id}/curriculum(lecture_id=${lecture_id})}"
+                        class="p-2 block text-sm hover:bg-blue-500 hover:text-white">커리큘럼 관리</a></li>
+            </th:block>
+        </ul>
+    </aside>
+
+</html>

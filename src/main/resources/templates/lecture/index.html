@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/lecture}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>강의 [[${lecture.name}]]의 소개 항목</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+
+<body>
+    <main layout:replace="~{layout/lecture :: content}">
+        <article layout:fragment="inner-content">
+            [(${lecture.description})]
+        </article>
+    </main>
+</body>
+
+</html>

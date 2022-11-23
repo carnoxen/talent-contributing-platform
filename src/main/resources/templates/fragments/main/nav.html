@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+
+<body>
+    <nav th:fragment="nav" class="mb-5 col-span-2">
+        <ul class="flex justify-end">
+            <li><a th:href="@{/search}" class="block p-4">강의 찾기</a></li>
+            <th:block th:if="${you}">
+                <li th:if="${you?.kind == 1 or you?.kind == 2}"><a th:href="@{/attend}" class="block rounded-lg bg-green-600 text-white p-2 m-2">출석하기</a></li>
+                <li class="relative group px-16 grid justify-items-center">
+                    <a th:href="@{/my}" class="block rounded-full w-10 h-10 bg-green-600 text-white p-2 m-2 relative z-20"></a>
+                    <ul class="group-hover:block hidden absolute text-sm z-10 top-8 pt-4 bg-gray-300 rounded-lg">
+                        <li class="text-xs p-1">[[${you.name}]]님, 환영합니다</li>
+                        <li><a th:href="@{/my/info}" class="block p-1 hover:bg-slate-500">회원정보 수정</a></li>
+                        <li><a th:href="@{/my/password}" class="block p-1 hover:bg-slate-500">비밀번호 수정</a></li>
+                        <th:block th:if="${you?.kind == 1 or you?.kind == 2}">
+                            <li><hr></li>
+                            <li><a th:href="@{/my/participation}" class="block p-1 hover:bg-slate-500">참여 내역</a></li>
+                            <li><a th:href="@{/my/attendance}" class="block p-1 hover:bg-slate-500">출석 내역</a></li>
+                            <li th:if="${you?.kind == 1}"><a th:href="@{/my/appraisal}" class="block p-1 hover:bg-slate-500">평가 내역</a></li>
+                        </th:block>
+                        <th:block th:if="${you?.kind == 0 or you?.kind == 2}">
+                            <li><hr></li>
+                            <li><a th:href="@{/manage}" class="block p-1 hover:bg-slate-500">강의 관리</a></li>
+                        </th:block>
+                    </ul>
+                </li>
+                <li class="grid place-content-center">
+                    <form th:action="@{/logout}" method="post" class="mx-2">
+                        <input type="submit" value="로그아웃" class="logout bg-red-600 text-white p-1.5 rounded-md">
+                    </form>
+                </li>
+            </th:block>
+            <th:block th:unless="${you}">
+                <li><a th:href="@{/login}" class="block rounded-lg bg-green-600 text-white p-2 m-2">로그인</a></li>
+                <li class="grid"><a th:href="@{/signup}" class="block rounded-lg border-black box-border border-2 place-self-center mx-2 p-1.5">회원가입</a></li>
+            </th:block>
+        </ul>
+    </nav>
+</body>
+
+</html>

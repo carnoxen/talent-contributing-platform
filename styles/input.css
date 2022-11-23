@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+table {
+    border-width: 2px;
+    border-color: white;
+    border-collapse: separate;
+}
+
+th, td {
+    padding: 0.25rem;
+    margin: 0.125rem;
+}
+
+th {
+    background-color: blue;
+    color: white;
+}
+
+tr td {
+    background-color: rgb(155, 190, 255);
+}
+
+tr:nth-child(even) td {
+    background-color: hsl(240, 66%, 74%);
+}
+
+button, input {
+    border-radius: 5px;
+    border-width: 2px;
+    border-color: hsl(240, 100%, 77%);
+}
+
+button[type]:not([class]), input:is([type=submit], [type=button]):not([class]), :is([class=edit], [class=remove], [class=cancel], [class=apply]) {
+    border-color: gray;
+    padding: 0.25rem;
+    background-color: lightgray;
+}
+
+form p {
+    margin-block: 0.5rem;
+}
+
+input[type].logout {
+    background-color: red;
+    border-style: none;
+}
+
+select {
+    border-width: 2px;
+    padding: 0.25rem;
+}
+
+textarea {
+    resize: both;
+}

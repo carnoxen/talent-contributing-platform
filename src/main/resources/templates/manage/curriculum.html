@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/manage}">
+
+<head>
+    <title>강의 [[${lecture.name}]]의 커리큘럼 관리 항목</title>
+</head>
+
+<body>
+    <main layout:fragment="content">
+        <h1 class="text-2xl my-2 font-bold">커리큘럼 관리</h1>
+        <p><button type="button" class="edit" data-id="create">커리큘럼 추가</button></p>
+        <dialog id="dialogcreate">
+            <form th:action="@{/manage/__${lecture_id}__/curriculum/create}" method="post">
+                <p><input type="date" name="startdate" th:min="${next_day}" th:max="${lecture.endDate}"></p>
+                <p><input type="time" name="starttime"> ~ <input type="time" name="endtime"></p>
+                <p><input type="text" name="title"></p>
+                <p>
+                    <input type="submit" value="작성 완료">
+                    <input type="button" value="취소" class="cancel" data-id="create">
+                </p>
+            </form>
+        </dialog>
+        <table>
+            <thead>
+                <tr>
+                    <th>강사명</th>
+                    <th>예정 날짜</th>
+                    <th>시작 시간</th>
+                    <th>끝 시간</th>
+                    <th>주제</th>
+                    <th>선택</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="curriculum : ${curriculums}" th:object="${curriculum}">
+                    <td>[[*{member.name}]]</td>
+                    <td>[[*{startDate}]]</td>
+                    <td>[[*{startTime}]]</td>
+                    <td>[[*{endTime}]]</td>
+                    <td>[[*{title}]]</td>
+                    <td>
+                        <th:block th:if="${curriculum.member.id == you.id}">
+                            <form th:action="@{/manage/__${lecture_id}__/curriculum/remove}" method="post">
+                                <button type="button" th:data-id="*{id}"
+                                    class="edit rounded-md bg-slate-200 p-2 text-sm">수정</button>
+                                <button type="submit" class="remove rounded-md bg-slate-200 p-2 text-sm">삭제</button>
+                                <input type="hidden" name="id" th:value="*{id}">
+                            </form>
+                            <dialog th:id="|dialog*{id}|">
+                                <form th:action="@{/manage/__${lecture_id}__/curriculum/edit}" method="post">
+                                    <!--/* <p>
+                                        <select name="teacher_id" class="border-blue-400 border-2">
+                                            <option th:each="teacher : ${teachers}" th:value="${teacher.id}">
+                                                [[${teacher.name}]]</option>
+                                        </select>
+                                    </p> */-->
+                                    <p><input type="date" name="startdate" th:value="*{startDate}" th:min="${next_day}" th:max="${lecture.endDate}"
+                                            class="border-blue-400 border-2"></p>
+                                    <p><input type="time" name="starttime" th:value="*{startTime}"
+                                            class="border-blue-400 border-2"> ~
+                                        <input type="time" name="endtime" th:value="*{endTime}"
+                                            class="border-blue-400 border-2">
+                                    </p>
+                                    <p><input type="text" name="title" th:value="*{title}" class="border-blue-400 border-2">
+                                    </p>
+                                    <p>
+                                        <input type="submit" value="수정 완료" class="rounded-md bg-slate-200 p-2 text-sm">
+                                        <input type="button" value="취소" class="cancel rounded-md bg-slate-200 p-2 text-sm"
+                                            th:data-id="*{id}">
+                                    </p>
+                                    <input type="hidden" name="id" th:value="*{id}">
+                                </form>
+                            </dialog>
+                            <script type="module" th:src="@{/js/erc.js}"></script>
+                        </th:block>
+                    </td>
+                </tr>
+                <tr th:if="${curriculums == null or #lists.size(curriculums) eq 0}">
+                    <td colspan="6">어떠한 내역도 없습니다.</td>
+                </tr>
+            </tbody>
+        </table>
+        <script type="module" th:src="@{/js/erc.js}"></script>
+    </main>
+</body>
+
+</html>

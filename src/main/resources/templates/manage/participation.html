@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/manage}">
+
+<head>
+    <title>강의 [[${lecture.name}]]의 참여 관리 항목</title>
+</head>
+
+<body>
+    <main layout:fragment="content">
+        <h1 class="text-2xl my-2 font-bold">참여 관리</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>이름</th>
+                    <th>이메일</th>
+                    <th>전화번호</th>
+                    <th>신청일자</th>
+                    <th>구분</th>
+                    <th>상태</th>
+                    <th>선택</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="participation : ${participations}" th:object="${participation}">
+                    <td>
+                        [[*{member.name}]]
+                        <th:block th:if="*{member.kind eq 2}">
+                            <button type="button" class="edit rounded-md bg-slate-200 p-2 text-sm"
+                                th:data-id="|t*{member.id}|">보기</button>
+                            <dialog th:id="|dialogt*{member.id}|">
+                                <article>[(*{member.career})]</article>
+                                <input type="button" class="cancel rounded-md bg-slate-200 p-2 text-sm"
+                                    th:data-id="|t*{member.id}|" value="닫기">
+                            </dialog>
+                        </th:block>
+                    </td>
+                    <td>[[*{member.username}]]</td>
+                    <td>[[*{member.phone}]]</td>
+                    <td>[[*{startDatetime}]]</td>
+                    <th:block th:switch="*{member.kind}">
+                        <td th:case="1">수강생</td>
+                        <td th:case="2">강사</td>
+                        <td th:case="*">미정</td>
+                    </th:block>
+                    <th:block th:switch="*{status}">
+                        <td th:case="0">거부됨</td>
+                        <td th:case="1">대기 중</td>
+                        <td th:case="2">수락됨</td>
+                        <td th:case="*">미정</td>
+                    </th:block>
+                    <td>
+                        <th:block th:if="*{status eq 1}">
+                            <form th:action="@{/manage/__${lecture_id}__/participation}" method="post">
+                                <button type="submit" class="grant rounded-md bg-slate-200 p-2 text-sm">수락</button>
+                                <input type="hidden" name="status" value="2">
+                                <input type="hidden" name="id" th:value="*{id}">
+                            </form>
+                            <form th:action="@{/manage/participation}" method="post">
+                                <button type="submit" class="revoke rounded-md bg-slate-200 p-2 text-sm">거부</button>
+                                <input type="hidden" name="status" value="0">
+                                <input type="hidden" name="id" th:value="*{id}">
+                            </form>
+                        </th:block>
+                    </td>
+                </tr>
+                <tr th:if="${participations == null or #lists.size(participations) eq 0}">
+                    <td colspan="7">어떠한 내역도 없습니다.</td>
+                </tr>
+            </tbody>
+        </table>
+        <script type="module" th:src="@{/js/manage_participation.js}"></script>
+        <script type="module" th:src="@{/js/erc.js}"></script>
+    </main>
+</body>
+
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/my}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex">
+    <title>회원 [[${you.name}]]의 평가 내역</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+
+<body>
+    <main layout:fragment="content">
+        <h1 class="text-2xl my-2 font-bold">평가 내역</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>강의명</th>
+                    <th>점수</th>
+                    <th>내용</th>
+                    <th>선택</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="appraisal : ${appraisals}" th:object="${appraisal}">
+                    <td>[[*{lecture.name}]]</td>
+                    <td>[[*{score}]]</td>
+                    <td>[[*{reason}]]</td>
+                    <td>
+                        <form th:action="@{/my/appraisal/remove}" method="post">
+                            <button type="button" class="edit" th:data-id="*{id}">수정</button>
+                            <button type="submit" class="remove">삭제</button>
+                            <input type="hidden" name="id" th:value="*{id}">
+                        </form>
+                        <dialog th:id="|dialog*{id}|">
+                            <form th:action="@{/my/appraisal/edit}" method="post">
+                                <p>[[*{lecture.name}]]</p>
+                                <p>
+                                    <select name="score" id="1score">
+                                        <option value="1.0">1.0</option>
+                                        <option value="1.5">1.5</option>
+                                        <option value="2.0">2.0</option>
+                                        <option value="2.5">2.5</option>
+                                        <option value="3.0" selected>3.0</option>
+                                        <option value="3.5">3.5</option>
+                                        <option value="4.0">4.0</option>
+                                        <option value="4.5">4.5</option>
+                                        <option value="5.0">5.0</option>
+                                    </select>
+                                </p>
+                                <p><textarea name="reason" required>[[*{reason}]]</textarea></p>
+                                <p>
+                                    <input type="submit" value="수정 완료">
+                                    <input type="button" value="취소" class="cancel" th:data-id="*{id}">
+                                </p>
+                                <input type="hidden" name="id" th:value="*{id}">
+                            </form>
+                        </dialog>
+                        <script type="module" th:src="@{/js/erc.js}"></script>
+                    </td>
+                </tr>
+                <tr th:if="${appraisals == null or #lists.size(appraisals) eq 0}">
+                    <td colspan="4">어떠한 내역도 없습니다.</td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+</body>
+
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/lecture}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>강의 [[${lecture.name}]]의 커리큘럼 항목</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+
+<body>
+    <main layout:replace="~{layout/lecture :: content}">
+        <ol layout:fragment="inner-content">
+            <li th:each="curriculum, stat : ${curriculums}" class="px-2 py-4 bg-gray-400 border-2 border-gray-200"
+                th:object="${curriculum}">
+                [[${stat.index + 1}]]: [[*{startDate}]] [[*{startTime}]] ~ [[*{endTime}]] - [[*{member.name}]]
+            </li>
+        </ol>
+    </main>
+</body>
+
+</html>

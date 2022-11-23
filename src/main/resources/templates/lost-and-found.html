@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex">
+    <title>아이디/비밀번호 찾기 페이지</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+
+<body class="w-screen h-screen grid place-content-center">
+    <form th:action="@{/lost-and-found/username}" method="post" class="bg-slate-400 px-2 py-4 rounded-2xl m-4">
+        <h1 class="font-bold text-2xl my-2">이메일 찾기</h1>
+        <p><label for="username">이메일: </label><input type="email" name="username" required> <input type="submit" value="찾기"
+                class="rounded-lg bg-green-600 text-white py-2 px-4"></p>
+    </form>
+    <form th:action="@{/lost-and-found/password}" method="post" class="bg-slate-400 px-2 py-4 rounded-2xl m-4">
+        <h1 class="font-bold text-2xl my-2">비밀번호 재설정</h1>
+        <p><label for="username">이메일: </label><input type="email" name="username" required> <input type="submit" value="재설정"
+                class="rounded-lg bg-green-600 text-white py-2 px-4"></p>
+    </form>
+</body>
+
+</html>

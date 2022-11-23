@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/lecture}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>강의 [[${lecture.name}]]의 평가 항목</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+
+<body>
+    <main layout:replace="~{layout/lecture :: content}">
+        <th:block layout:fragment="inner-content">
+            <th:block
+                th:with="oppar = ${@participationRepository.findByLectureAndMember(lecture, you)}, opapp = ${@appraisalRepository.findByLectureAndMember(lecture, you)}">
+                <th:block
+                    th:if="${oppar.isPresent() && opapp.isEmpty() && (oppar.get().status == 2) && (you?.kind == 1)}">
+                    <p><button type="button" data-id="create" class="edit">평가하기</button></p>
+                    <dialog id="dialogcreate">
+                        <form th:action="@{/lecture/__${lecture_id}__/appraisal}" method="post">
+                            <p>점수:
+                                <select name="score" id="1score">
+                                    <option value="1.0">1.0</option>
+                                    <option value="1.5">1.5</option>
+                                    <option value="2.0">2.0</option>
+                                    <option value="2.5">2.5</option>
+                                    <option value="3.0" selected>3.0</option>
+                                    <option value="3.5">3.5</option>
+                                    <option value="4.0">4.0</option>
+                                    <option value="4.5">4.5</option>
+                                    <option value="5.0">5.0</option>
+                                </select>
+                            </p>
+                            <p><textarea name="reason" required></textarea></p>
+                            <p>
+                                <input type="submit" value="평가 완료">
+                                <input type="button" value="취소" class="cancel" data-id="create">
+                            </p>
+                        </form>
+                    </dialog>
+                    <script type="module" th:src="@{/js/erc.js}"></script>
+                </th:block>
+            </th:block>
+            <ul class="grid md:grid-cols-3 grid-flow-row gap-2">
+                <li class="block border-black bg-gray-300 p-2 rounded-2xl border-2" th:each="appraisal : ${appraisals}" th:object="${appraisal}">
+                    <p>[[*{score}]] <small>[[*{member.name.replaceAll('\B.*', '*')}]]</small></p>
+                    <hr class="border-black">
+                    <pre>[[*{reason}]]</pre>
+                </li>
+            </ul>
+        </th:block>
+    </main>
+</body>
+
+</html>

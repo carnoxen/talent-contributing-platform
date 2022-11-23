@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/lecture}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>강의 [[${lecture.name}]]의 공지 항목</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+
+<body>
+    <main layout:replace="~{layout/lecture :: content}">
+        <table layout:fragment="inner-content">
+            <thead>
+                <tr>
+                    <th>제목</th>
+                    <th>날짜</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="notice : ${notices}" th:object="${notice}">
+                    <td>
+                        [[*{title}]]
+                        <button type="button" class="edit rounded-md bg-slate-200 p-2 text-sm"
+                            th:data-id="|n*{id}|">보기</button>
+                        <dialog th:id="|dialogn*{id}|">
+                            <form method="dialog">
+                                <article>[[*{description}]]</article>
+                                <input type="button" class="cancel rounded-md bg-slate-200 p-2 text-sm"
+                                    th:data-id="|n*{id}|" value="닫기">
+                            </form>
+                        </dialog>
+                    </td>
+                    <td>[[*{startDatetime}]]</td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+</body>
+
+</html>

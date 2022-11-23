@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security" layout:decorate="~{layout/main}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex">
+    <title>[[${q ?: '전체'}]] 검색 결과</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+
+<body>
+    <main layout:fragment="content" class="grid place-items-center">
+        <h1 class="text-4xl font-bold p-2">검색</h1>
+        <form th:action="@{/search}" method="get">
+            <p>
+                <input type="text" name="q" class=" rounded-xl border-blue-400 border-2 p-1" th:value="${param.q}">
+                <input type="submit" value="검색" class="bg-green-400 rounded-md text-white px-2 py-1"><br>
+                <select name="s">
+                    <option value="">관련도 순</option>
+                    <th:block sec:authorize="isAuthenticated()">
+                        <option th:each="se : ${sortEntry}" th:value="${se.key}"
+                            th:selected="${#strings.equals(param.s, se.key)}">[[${se.value}]]</option>
+                    </th:block>
+                </select>
+            </p>
+        </form>
+        <ul>
+            <li th:each="s : ${searched}">
+                <a th:href="@{/lecture/{id}(id=${s.id})}" class="block m-2 p-4 border-black border-2 rounded-2xl">
+                    <p class="text-2xl mb-2 font-bold">[[${s.name}]]</p>
+                    <p>장소: [[${s.address}]]</p>
+                    <p>기간: [[${s.startDate}]] ~ [[${s.endDate}]]</p>
+                </a>
+            </li>
+        </ul>
+    </main>
+</body>
+
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/manage}">
+<head>
+    <title>강의 [[${lecture.name}]]의 관리 홈페이지</title>
+</head>
+<body>
+    <main layout:fragment="content" class="m-8 p-4 bg-white grid place-content-center">
+        <h1 class="text-2xl my-2 font-bold">welcome</h1>
+        <div class="grid grid-flow-col h-64">
+            <section class="w-48 text-center">
+                <h2 class="text-2xl font-bold m-6">평균 평점</h2>
+                <p>[[${average ?: '-'}]]</p>
+            </section>
+            <section class="w-48 text-center">
+                <h2 class="text-2xl font-bold m-6">수강생 수</h2>
+                <p>[[${scount}]] 명</p>
+            </section>
+            <section class="w-48 text-center">
+                <h2 class="text-2xl font-bold m-6">강사 수</h2>
+                <p>[[${tcount}]] 명</p>
+            </section>
+        </div>
+    </main>
+</body>
+</html>

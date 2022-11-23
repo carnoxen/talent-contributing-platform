@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/my}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex">
+    <title>회원 [[${you.name}]]의 홈페이지</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+    <main layout:fragment="content">
+        <p>welcome</p>
+    </main>
+</body>
+</html>

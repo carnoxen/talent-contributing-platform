@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+
+<body class="grid grid-cols-[200px_1fr] grid-rows-[50px_1fr] bg-gray-300 min-h-screen">
+    <nav layout:fragment="nav" th:replace="fragments/manage/nav :: nav"></nav>
+    <aside layout:fragment="side" th:replace="fragments/manage/side :: side"></aside>
+    <main layout:fragment="content" class="m-8 p-4 bg-white"></main>
+</body>
+
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/manage}">
+
+<head>
+    <title>강의 [[${lecture.name}]]의 공지 관리 항목</title>
+</head>
+
+<body>
+    <main layout:fragment="content">
+        <h1 class="text-2xl my-2 font-bold">공지 관리</h1>
+        <p><button type="button" class="edit rounded-md bg-slate-200 p-2 text-sm" data-id="create">공지 추가</button></p>
+        <dialog id="dialogcreate">
+            <form th:action="@{/manage/__${lecture_id}__/notice/create}" method="post">
+                <p><input type="text" name="title" class="border-blue-400 border-2" required></p>
+                <p><textarea name="description" class="border-blue-400 border-2" required></textarea></p>
+                <p>
+                    <input type="submit" value="작성 완료" class="rounded-md bg-slate-200 p-2 text-sm">
+                    <input type="button" value="취소" class="cancel rounded-md bg-slate-200 p-2 text-sm" data-id="create">
+                </p>
+                <input type="hidden" name="lecture_id" th:value="${lecture_id}">
+            </form>
+        </dialog>
+        <table>
+            <thead>
+                <tr>
+                    <th>제목</th>
+                    <th>날짜</th>
+                    <th>선택</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="notice : ${notices}" th:object="${notice}">
+                    <td>[[*{title}]]</td>
+                    <td>[[*{startDatetime}]]</td>
+                    <td>
+                        <form th:action="@{/manage/__${lecture_id}__/notice/remove}" method="post">
+                            <button type="button" class="edit rounded-md bg-slate-200 p-2 text-sm"
+                                th:data-id="*{id}">수정</button>
+                            <button type="submit" class="remove rounded-md bg-slate-200 p-2 text-sm">삭제</button>
+                            <input type="hidden" name="id" th:value="*{id}">
+                        </form>
+                        <dialog th:id="|dialog*{id}|">
+                            <form th:action="@{/manage/__${lecture_id}__/notice/edit}" method="post">
+                                <p><input type="text" name="title" th:value="*{title}" class="border-blue-400 border-2" required>
+                                </p>
+                                <p><textarea name="description"
+                                        class="border-blue-400 border-2" required>[[*{description}]]</textarea></p>
+                                <p>
+                                    <input type="submit" value="수정 완료" class="rounded-md bg-slate-200 p-2 text-sm">
+                                    <input type="button" value="취소" class="cancel rounded-md bg-slate-200 p-2 text-sm"
+                                        th:data-id="*{id}">
+                                </p>
+                                <input type="hidden" name="id" th:value="*{id}">
+                            </form>
+                        </dialog>
+                    </td>
+                </tr>
+                <tr th:if="${notices == null or #lists.size(notices) eq 0}">
+                    <td colspan="3">어떠한 내역도 없습니다.</td>
+                </tr>
+            </tbody>
+        </table>
+        <script type="module" th:src="@{/js/erc.js}"></script>
+    </main>
+</body>
+
+</html>

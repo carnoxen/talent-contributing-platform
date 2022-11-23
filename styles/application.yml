@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:mariadb://database-mariadb.ccnu6i8umzwj.ap-northeast-2.rds.amazonaws.com:3306/tft
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: tftcrud
+    password: qkdlxj1!
+  jpa:
+    open-in-view: false
+  mail:
+    host: email-smtp.ap-northeast-2.amazonaws.com
+    username: AKIAY5YMZ32Y63KFOXJQ
+    password: BC46YtLGEuggZtaLCPcfBxJNBeTyFCRIqAEYM/qp/EFZ
+    properties:
+      mail:
+        transport:
+          protocol: smtp
+        smtp:
+          port: 587
+          auth: true
+          starttls:
+            enable: true
+            required: true

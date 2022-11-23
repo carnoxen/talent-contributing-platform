@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex">
+    <title>회원 가입</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <script th:src="@{/js/tinymce/tinymce.min.js}"></script>
+</head>
+
+<body class="grid place-items-center">
+    <form th:action="@{/signup}" method="post" th:object="${form}" class="w-4/6 py-10">
+        <article>
+            <h1>개인정보 제공 동의</h1>
+            <p><em>&lt; 바이터그룹(주) &gt;('tft.bitor-group.com'이하 'TFT')</em>은(는) 「개인정보 보호법」 제30조에 따라 정보주체의 개인정보를 보호하고 이와
+                관련한 고충을 신속하고 원활하게 처리할 수 있도록 하기 위하여 다음과 같이 개인정보 처리방침을 수립·공개합니다.</p>
+            <p>○ 이 개인정보처리방침은 <em>2022</em>년 <em>1</em>월 <em>1</em>부터 적용됩니다.</p>
+        </article>
+        <p class="text-center underline text-2xl">
+            <label th:for="${#ids.next('approved')}">위 내용에 동의합니다. (클릭)&gt;&gt;&gt;</label>
+            <input type="checkbox" th:field="*{approved}" required>
+            <br><small th:errors="*{approved}">동의하셔야 합니다.</small>
+        </p>
+
+        <p>
+            <label for="username">이메일:</label>
+            <input type="email" th:field="*{username}" class="w-full border-2 border-blue-200" required>
+            <input type="button" id="btn-verify-email" disabled value="이메일 확인">
+            <br><small th:errors="*{username}">이메일을 기입하셔야 합니다.</small>
+            <br><small th:errors="*{verified}">동의하셔야 합니다.</small>
+            <span id="code-block" hidden>
+                <input type="text" id="code"> <input type="button" id="btn-verify-code" value="코드 확인">
+                <input type="hidden" th:field="*{verified}" required>
+            </span>
+        </p>
+        <p>
+            <label for="password">비밀번호:</label>
+            <small class="text-red-600">※5자 이상</small>
+            <input type="password" minlength="5" th:field="*{password}" class="w-full border-2 border-blue-200" required
+                placeholder="최소 5자리">
+        </p>
+        <p>
+            <label for="password_confirm">비밀번호 확인:</label>
+            <input type="password" minlength="5" th:field="*{password_confirm}" class="w-full border-2 border-blue-200"
+                required>
+        </p>
+        <p>
+            <!--/* 
+                <label for="phone">전화번호:</label>
+                <small style="color: red;">숫자만</small><br>
+                <input type="tel" th:field="*{phone}" class="w-[70%] border-2 border-blue-200" required placeholder="01012345678 (숫자만)" pattern="\d{9,12}"> 
+            */-->
+            <input type="button" value="인증하기" id="btn-phone-auth">
+            <br><span id="authenticated">확인 중</span>
+        </p>
+        <p>
+            <label for="address">주소:</label><br>
+            <input type="text" th:field="*{address}" autocomplete="off" class="w-full border-2 border-blue-200" required
+                readonly placeholder="클릭하세요">
+            <input type="text" th:field="*{addressInternal}" autocomplete="off" class="w-full border-2 border-blue-200"
+                required>
+        </p>
+
+        <p>
+            구분:
+            <label><input type="radio" name="kind" value="1" checked required> 수강생</label>
+            <label><input type="radio" name="kind" value="2"> 강사</label>
+            <label><input type="radio" name="kind" value="0"> 기업</label>
+        </p>
+        <div id="career-field" hidden>
+            <label for="career">경력:</label>
+            <textarea th:field="*{career}"></textarea>
+        </div>
+        <div id="owner-field" hidden>
+            <label for="owner">업주:</label>
+            <input type="text" th:field="*{owner}" placeholder="대표의 성함">
+        </div>
+
+        <p class="flex justify-center"><input type="submit" value="작성 완료" class="p-2 rounded-lg bg-green-400"></p>
+
+        <input type="hidden" required th:field="*{uid}" placeholder="인증코드">
+        <input type="hidden" required th:field="*{latitude}" placeholder="위도">
+        <input type="hidden" required th:field="*{longitude}" placeholder="경도">
+    </form>
+    <dialog id="address-dialog">
+        <form method="dialog">
+            <input type="text" id="address-map" list="address-list" autocomplete="off">
+            <datalist id="address-list"></datalist>
+            <input type="submit" value="cancel">
+        </form>
+    </dialog>
+    <script src="https://cdn.ckeditor.com/ckeditor5/35.1.0/classic/ckeditor.js"></script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector("#career"))
+            .catch(console.error);
+    </script>
+    <!--/* i'mport */-->
+    <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+    <script src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+    <script th:src="@{/js/i-auth.js}"></script>
+    <!--/* google place autocomplete */-->
+    <!--/* 
+        <script th:src="@{/js/g-auto.js}"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBJts9B8jo6qgSM0X1NoCbwNZeRZzDbMzo&callback=initAutocomplete&libraries=places" defer></script> 
+    */-->
+    <script th:src="@{/js/signup.js}"></script>
+    <script th:src="@{/js/n-map.js}"></script>
+</body>
+
+</html>

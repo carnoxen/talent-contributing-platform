@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/my}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex">
+    <title>회원 [[${you.name}]]의 참여 내역</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+    <main layout:fragment="content">
+        <h1 class="text-2xl my-2 font-bold">참여 내역</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>강의명</th>
+                    <th>참여일자</th>
+                    <th>구분</th>
+                    <th>상태</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="participation : ${participations}" th:object="${participation}">
+                    <td>[[*{lecture.name}]]</td>
+                    <td>[[*{startDatetime}]]</td>
+                    <th:block th:switch="${you.kind}">
+                        <td th:case="1">수강생</td>
+                        <td th:case="2">강사</td>
+                        <td th:case="*">미정</td>
+                    </th:block>
+                    <th:block th:switch="*{status}">
+                        <td th:case="0">거부됨</td>
+                        <td th:case="1">대기 중</td>
+                        <td th:case="2">수락됨</td>
+                        <td th:case="*">미정</td>
+                    </th:block>
+                </tr>
+                <tr th:if="${participations == null or #lists.size(participations) eq 0}"><td colspan="4">어떠한 내역도 없습니다.</td></tr>
+            </tbody>
+        </table>
+    </main>
+</body>
+</html>

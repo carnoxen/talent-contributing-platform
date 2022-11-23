@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<body>
+    <nav th:fragment="nav" class="flex justify-end bg-blue-500 col-span-2 items-center px-2">
+        <a th:href="@{/}" class="block bg-green-400 text-white p-1.5 rounded-md mr-auto">홈페이지</a>
+        <select id="lecture" class="lecsel p-1 rounded-lg mx-2">
+            <option th:each="lecture : ${lectures}" th:value="${lecture.id}" th:selected="${lecture.id eq lecture_id}">[[${lecture.name}]]</option>
+        </select>
+        <input type="hidden" id="context-path" th:value="@{/manage/}">
+        <script th:src="@{/js/select.js}" type="module"></script>
+        <a th:href="@{/create-lecture}" class="block bg-green-400 text-white p-1 rounded-md mx-2" sec:authorize="${principal.kind == 0}">강의 개설</a>
+        <form th:action="@{/logout}" method="post" class="grid place-content-center">
+            <input type="submit" value="로그아웃" class="logout bg-red-600 text-white p-1.5 rounded-md">
+        </form>
+    </nav>
+
+</html>

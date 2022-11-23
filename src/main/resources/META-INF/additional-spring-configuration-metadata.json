@@ -1,0 +1,17 @@
+{"properties": [
+  {
+    "name": "iamport.key",
+    "type": "java.lang.String",
+    "description": "key of iamport"
+  },
+  {
+    "name": "iamport.secret",
+    "type": "java.lang.String",
+    "description": "Secret string of iamport"
+  },
+  {
+    "name": "zone.id",
+    "type": "java.lang.String",
+    "description": "Id of your timezone"
+  }
+]}

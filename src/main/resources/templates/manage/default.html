@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex">
+    <title>강의를 개설하지 않았습니다.</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body class="grid place-content-center h-screen">
+    <main class="text-center">
+        <p>강의가 없습니다</p>
+        <p sec:authorize="${principal.kind == 0}"><a href="@{/create-lecture}" class="block rounded-lg bg-green-500 text-white p-2">개설하기</a></p>
+        <p sec:authorize="${principal.kind == 2}"><a href="@{/search}" class="block rounded-lg bg-green-500 text-white p-2">참여하기</a></p>
+    </main>
+</body>
+</html>

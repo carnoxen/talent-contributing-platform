@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+
+<body>
+    <div th:fragment="heading" class="grid grid-cols-2 grid-rows-2 grid-flow-col gap-x-48 gap-y-10">
+        <h1 class="font-bold text-4xl place-self-center">[[${lecture.name}]]</h1>
+        <ul>
+            <li>개설자: [[${lecture.member.name}]]</li>
+            <li>예정 기간: [[${lecture.startDate}]] ~ [[${lecture.endDate}]]</li>
+            <li>장소: [[${lecture.address}]]</li>
+            <li>카테고리:
+                <th:block th:each="category: ${categories}">
+                    <span>[[${category.name}]]</span>
+                </th:block>
+            </li>
+        </ul>
+        <div class="row-span-2 grid place-items-center">
+            <ul>
+                <li>시간표:
+                    <ol>
+                        <li th:each="schedule : ${schedules}">
+                            <th:block th:switch="${schedule.weekday}">
+                                <span th:case="1">일</span>
+                                <span th:case="2">월</span>
+                                <span th:case="3">화</span>
+                                <span th:case="4">수</span>
+                                <span th:case="5">목</span>
+                                <span th:case="6">금</span>
+                                <span th:case="7">토</span>
+                            </th:block>
+                            <span>[[${schedule.startTime}]] ~ [[${schedule.endTime}]]</span>
+                        </li>
+                    </ol>
+                </li>
+            </ul>
+            <th:block th:if="${you ne null}">
+                <th:block th:if="${you?.id eq lecture?.member?.id}">
+                    <a th:href="@{/manage/{lecture_id}(lecture_id=${lecture.id})}"
+                        class="block rounded-lg bg-blue-600 text-white p-2 m-2 text-center">강의 관리하기</a>
+                </th:block>
+                <th:block th:if="${you?.id ne lecture?.member?.id}">
+                    <th:block th:with="oppar = ${@participationRepository.findByLectureAndMember(lecture, you)}">
+                        <th:block th:if="${oppar.isPresent()}">
+                            <th:block th:with="par = ${oppar.get()}">
+                                <ul>
+                                    <li>구분:
+                                        <th:block th:switch="${par.member.kind}">
+                                            <span th:case="1">수강생</span>
+                                            <span th:case="2">강사</span>
+                                            <span th:case="*">미정</span>
+                                        </th:block>
+                                    </li>
+                                    <li>상태:
+                                        <th:block th:switch="${par.status}">
+                                            <span th:case="0">거부됨</span>
+                                            <span th:case="1">대기 중</span>
+                                            <span th:case="2">수락됨</span>
+                                            <span th:case="*">미정</span>
+                                        </th:block>
+                                    </li>
+                                </ul>
+                            </th:block>
+                        </th:block>
+                        <th:block th:if="${oppar.isEmpty()}">
+                            <th:block th:if="${you.kind eq 1}"
+                                th:with="student_allow = ${@participationRepository.countStudentByLecture(lecture) lt lecture.studentLimit}">
+                                <th:block th:if="${student_allow}">
+                                    <form th:action="@{/lecture/__${lecture_id}__/participate}" method="post">
+                                        <p><input type="submit" value="수강 신청" class="apply"></p>
+                                    </form>
+                                </th:block>
+                                <th:block th:unless="${student_allow}">
+                                    <span class="block rounded-lg bg-gray-300 text-gray-500 p-2 m-2 text-center">수강생 모집
+                                        완료</span>
+                                </th:block>
+                            </th:block>
+                            <th:block th:if="${you.kind eq 2}"
+                                th:with="teacher_allow = ${@participationRepository.countTeacherByLecture(lecture) lt lecture.teacherLimit}">
+                                <th:block th:if="${teacher_allow}">
+                                    <form th:action="@{/lecture/__${lecture_id}__/participate}" method="post">
+                                        <p><input type="submit" value="지도 신청" class="apply"></p>
+                                    </form>
+                                </th:block>
+                                <th:block th:unless="${teacher_allow}">
+                                    <span class="block rounded-lg bg-gray-300 text-gray-500 p-2 m-2 text-center">강사 모집
+                                        완료</span>
+                                </th:block>
+                            </th:block>
+                            <script th:src="@{/js/application.js}"></script>
+                        </th:block>
+                    </th:block>
+                </th:block>
+            </th:block>
+        </div>
+    </div>
+</body>
+
+</html>

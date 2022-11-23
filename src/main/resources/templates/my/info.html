@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/my}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex">
+    <title>회원 [[${you.name}]]의 정보 편집</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+    <main layout:fragment="content">
+        <h1 class="text-2xl my-2 font-bold">회원정보 수정</h1>
+        <form th:action="@{/my/info}" method="post" th:object="${form}">
+            <p>
+                <label for="username">이메일:</label> 
+                <input type="email" th:field="*{username}" class="w-full border-2 border-blue-200" required> <input type="button" id="btn-verify-email" disabled value="이메일 확인">
+                <span id="code-block" hidden>
+                    <input type="text" id="code"> <input type="button" id="btn-verify-code" value="코드 확인">
+                    <input type="hidden" th:field="*{verified}">
+                </span>
+            </p>
+            <p>
+                <!--/*
+                    <label for="phone">전화번호:</label><br>
+                    <input type="tel" th:field="*{phone}" class="w-[70%] border-2 border-blue-200" readonly required> 
+                */-->
+                <input type="button" value="인증하기" id="btn-phone-auth">
+                <br><span id="authenticated">변경 전</span>
+            </p>
+            <p>
+                <label for="address">주소:</label><br>
+                <input type="text" th:field="*{address}" autocomplete="off" class="w-full border-2 border-blue-200" required readonly placeholder="클릭하세요">
+                <input type="text" th:field="*{addressInternal}" autocomplete="off" class="w-full border-2 border-blue-200" required>
+            </p>
+
+            <p th:if="*{kind == 2}">
+                <label for="career">경력:</label> 
+                <textarea th:field="*{career}"></textarea>
+                <script src="https://cdn.ckeditor.com/ckeditor5/35.1.0/classic/ckeditor.js"></script>
+                <script>
+                    ClassicEditor
+                    .create(document.querySelector("#career"))
+                    .catch(console.error);
+                </script>
+            </p>
+            <p th:if="*{kind == 0}">
+                <label for="owner">업주:</label> 
+                <input type="text" th:field="*{owner}" required>
+            </p>
+    
+            <p class="flex justify-center"><input type="submit" value="작성 완료" class="p-2 rounded-lg bg-green-400"></p>
+        
+            <input type="hidden" required th:field="*{uid}" placeholder="인증코드">
+            <input type="hidden" required th:field="*{latitude}" placeholder="위도">
+            <input type="hidden" required th:field="*{longitude}" placeholder="경도">
+        </form>
+        <dialog id="address-dialog">
+            <form method="dialog">
+                <input type="text" id="address-map" list="address-list" autocomplete="off">
+                <datalist id="address-list"></datalist>
+                <input type="submit" value="cancel">
+            </form>
+        </dialog>
+        <!-- i'mport -->
+        <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+        <script src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+        <script th:src="@{/js/i-auth.js}"></script>
+        <!-- google place autocomplete -->
+        <!--/* 
+            <script th:src="@{/js/g-auto.js}"></script>
+            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBJts9B8jo6qgSM0X1NoCbwNZeRZzDbMzo&callback=initAutocomplete&libraries=places" defer></script> 
+        */-->
+        <script th:src="@{/js/n-map.js}"></script>
+    </main>
+</body>
+</html>
